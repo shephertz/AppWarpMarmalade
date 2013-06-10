@@ -3,7 +3,7 @@ AppWarpMarmalade
 
 AppWarp SDK for Marmalade
 
-To use AppWarp SDK, copy the appwarp folder with your project folder. In your mkb file, define appwarp module path using
+To use AppWarp SDK, copy the appwarp folder in the same directory as your project folder. In your mkb file, define appwarp module path using
 
 `define option module_path="../appwarp"` 
 
