@@ -11,7 +11,6 @@ namespace AppWarp
 	public:
 		virtual void onConnectDone(int) {};
 		virtual void onDisConnectDone(int) {};
-		//virtual void onJoinZoneDone(int) {};
 	};
 
 	class LobbyRequestListener
