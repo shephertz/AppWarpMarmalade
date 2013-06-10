@@ -1,0 +1,37 @@
+#!/usr/bin/env mkb
+
+option module_path="../appwarp"
+
+files
+{
+	(source)
+	game.h
+	game.cpp
+	scene.h
+	scene.cpp
+	background.h
+	background.cpp
+	player.h
+	player.cpp
+	main.h
+	main.cpp
+}
+
+subprojects
+{
+	appwarp
+	iwhttp
+	iw2d
+}
+
+assets
+{
+	(data)
+	monster1.png
+	monster2.png
+	monster3.png
+	monster4.png
+	monster5.png
+	bg.png
+	bg2.png
+}
