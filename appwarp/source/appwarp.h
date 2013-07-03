@@ -1,4 +1,13 @@
 
+/**
+Using AppWarp, developers can now add realtime communication to their Marmalade games to build 
+beautiful, rich and engaging multiplayer games. The great thing is that developers can do this 
+without any server side code or socket level programming as all the communication is managed 
+by AppWarp Marmalade SDK and cloud.
+
+@author Suyash Mohan (suyash.mohan@shephertz.co.in)
+*/
+
 #ifndef __APPWARP__
 #define __APPWARP__
 
@@ -10,8 +19,16 @@
 
 #include "pthread.h"
 #include "IwHTTP.h"
+//#include "IwGx.h"
+
+#include "HMAC_SHA1.h"
+#include "base64.h"
+#include "urlencode.h"
+#include "cJSON.h"
 
 #include "defines.h"
+#include "utilities.h"
+#include "requests.h"
 #include "socket.h"
 #include "listener.h"
 
@@ -51,51 +68,399 @@ namespace AppWarp
 		static int32 GotHeaders(void *, void *);
 
 		bool threaded;
+
+		bool m_isConnected;
 	public:
 		~Client();
-		static Client* getInstance();
-		static void initialize(std::string, std::string);
-		void SetPollingMode(bool);
-		void setConnectionRequestListener(ConnectionRequestListener *);
-		void setLobbyRequestListener(LobbyRequestListener *);
-		void setNotificationListener(NotificationListener *);
-		void setChatRequestListener(ChatRequestListener *);
-		void setRoomRequestListener(RoomRequestListener *);
-		void setZoneRequestListener(ZoneRequestListener *);
-		void setUpdateRequestListener(UpdateRequestListener *);
 
-		void connect(std::string);
+		/**
+		 * Tells whether AppWARP SDK is connected to AppWARP server or not
+		 * @return bool
+		 */
+		bool isConnected() { return m_isConnected; }
+
+		/**
+		* Returns the singleton instance of WarpClient
+		*/
+		static Client* getInstance();
+
+		/**
+		 * This should be your first API call to WarpClient. This will instantiate
+		 * the WarpClient singleton and set it up to be used with the keys provided
+		 * in params. Calling it more than once will return error. This will setup
+		 * the client to work with the cloud server appwarp.shephertz.com
+		 *
+		 * @param apikey
+		 * @param secretekey
+		 * @return void
+		 */
+		static void initialize(std::string apikey, std::string secretekey);
+
+		/*
+		 * You can either run AppWarp in a separate thread or in main thread. If you want to 
+		 * run it in main thread then you have to Set Polling Mode to true. By default, this 
+		 * is set to true. If you are running AppWarp in main thread then, you have to call Update() 
+		 * function at-least once in your game loop.
+		 *
+		 * @param mode 
+		 * @return void
+		 */
+		void SetPollingMode(bool mode);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for connect, authenticate and
+		 * disconnect APIs.
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setConnectionRequestListener(ConnectionRequestListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for Lobby requests like
+		 * join/leaveLobby, subscribe/unsubscribeLobby and getLiveLobbyInfo
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setLobbyRequestListener(LobbyRequestListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * notification is received from the server for any resource that has been
+		 * subscribed to.
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setNotificationListener(NotificationListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for sendChat request.
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setChatRequestListener(ChatRequestListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for Room requests like
+		 * join/leaveRoom, subscribe/unsubscribeRoom and getLiveRoomInfo
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setRoomRequestListener(RoomRequestListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for Zone level requests like
+		 * create/deleteRoom, User requests etc. disconnect APIs.
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setZoneRequestListener(ZoneRequestListener *listener);
+
+		/**
+		 * Set your listener object on which callbacks will be invoked when a
+		 * response from the server is received for sendUpdate request.
+		 *
+		 * @param listener
+		 * @return void
+		 */
+		void setUpdateRequestListener(UpdateRequestListener *listener);
+
+		/**
+		 * Initiates your connection with the WARP server. The result of the
+		 * operation is provided in the onConnectDone callback of the
+		 * ConnectionListener.
+		 *
+		 * @param user
+		 * @return void
+		 */
+		void connect(std::string user);
+
+		/**
+		 * Disconnects the connection with the WARP server. The result for this
+		 * request will be provided in the onDisconnectDone callback of the
+		 * ConnectionListener.
+		 *
+		 * @return void
+		 */
 		void disconnect();
+
+		/**
+		 * sends a join lobby request to the server. Result of the request is
+		 * provided in the onJoinLobbyDone callback of the LobbyListener
+		 *
+		 * @return void
+		 */
 		void joinLobby();
+
+		/**
+		 * sends a leave lobby request to the server. Result of the request is
+		 * provided in the onLeaveLobbyDone callback of the LobbyListener
+		 *
+		 * @return void
+		 */
 		void leaveLobby();
+
+		/**
+		 * sends a subscribe lobby request to the server. Result of the request is
+		 * provided in the onSubscribeLobbyDone callback of the LobbyListener
+		 *
+		 * @return void
+		 */
 		void subscribeLobby();
+
+		/**
+		 * sends a unsubscribe lobby request to the server. Result of the request is
+		 * provided in the onUnSubscribeLobbyDone callback of the LobbyListener
+		 *
+		 * @return void
+		 */
 		void unsubscribeLobby();
-		void joinRoom(std::string);
-		void subscribeRoom(std::string);
-		void leaveRoom(std::string);
-		void unsubscribeRoom(std::string);
-		void createRoom(std::string,std::string,int);
-		void createRoom(std::string,std::string,int,std::map<std::string,std::string>);
-		void deleteRoom(std::string);
-		void getLiveRoomInfo(std::string);
+
+		/**
+		 * sends a join room request to the server. Result of the request is
+		 * provided in the onJoinRoomDone callback of the RoomListener.
+		 *
+		 * @param roomId
+		 * @return void
+		 */
+		void joinRoom(std::string roomId);
+
+		/**
+		 * sends a subscribe room request to the server. Result of the request is
+		 * provided in the onSubscribeRoomDone callback of the RoomListener.
+		 *
+		 * @param roomId
+		 * @return void
+		 */
+		void subscribeRoom(std::string roomId);
+
+		/**
+		 * sends a leave room request to the server. Result of the request is
+		 * provided in the onLeaveRoomDone callback of the RoomListener.
+		 *
+		 * @param roomId
+		 * @return void
+		 */
+		void leaveRoom(std::string roomId);
+
+		/**
+		 * sends a unsubscribe room request to the server. Result of the request is
+		 * provided in the onUnsubscribeRoomDone callback of the RoomListener.
+		 *
+		 * @param roomId
+		 * @return void
+		 */
+		void unsubscribeRoom(std::string roomId);
+		
+		/**
+		 * sends a create room request to the server. Result of the request is
+		 * provided in the onCreateRoomDone callback of the ZoneRequestListener.
+		 *
+		 * @param name
+		 * @param owner
+		 * @param maxUsers
+		 * @return void
+		 */
+		void createRoom(std::string name,std::string owner,int maxUsers);
+
+		/**
+		 * sends a create room request to the server. Result of the request is
+		 * provided in the onCreateRoomDone callback of the ZoneRequestListener.
+		 *
+		 * @param name
+		 * @param owner
+		 * @param maxUsers
+		 * @param properties
+		 * @return void
+		 */
+		void createRoom(std::string name,std::string owner,int maxUsers,std::map<std::string,std::string> properties);
+
+		 /**
+		 * sends a delete room request to the server. Result of the request is
+		 * provided in the onDeleteRoomDone callback of the ZoneListener.
+		 *
+		 * @param roomId
+		 * @return void
+		 */
+		void deleteRoom(std::string roomId);
+
+		/**
+		 * Retrieves live information of the room from the server. Result is
+		 * provided in the onGetLiveRoomInfo callback of the RoomListener.
+		 *
+		 * @param roomid
+		 * @return void
+		 */
+		void getLiveRoomInfo(std::string roomid);
+
+		/**
+		 * Retrieves live information of the lobby from the server. Result is
+		 * provided in the onGetLiveLobbyInfo callback of the LobbyListener.
+		 *
+		 * @return void
+		 */
 		void getLiveLobbyInfo();
-		void getLiveUserInfo(std::string);
-		void sendChat(std::string);
-		void sendUpdate(byte*,int);
-		void setCustomUserData(std::string, std::string);
-		void setCustomRoomData(std::string, std::string);
+
+		/**
+		 * Retrieves live information of the user from the server. Result is
+		 * provided in the onGetLiveUserInfo callback of the ZoneListener.
+		 *
+		 * @param username
+		 * @return void
+		 */
+		void getLiveUserInfo(std::string username);
+
+		/**
+		 * sends a chat message to room in which the user is currently joined.
+		 * Result of the request is provided in the onSendChatDone callback of the
+		 * ChatListener.
+		 *
+		 * @param message
+		 * @return void
+		 */
+		void sendChat(std::string message);
+
+		/**
+		 * sends a custom update message to room in which the user is currently
+		 * joined. Result of the request is provided in the onSendUpdatePeersDone
+		 * callback of the UpdateListener.
+		 *
+		 * @param update
+		 * @param updateLen
+		 */
+		void sendUpdate(byte* update,int updateLen);
+
+		/**
+		 * Updates the custom roomData associated with the given user on the server.
+		 * Result is provided in the onSetCustomUserDataDone callback of the
+		 * ZoneListener.
+		 *
+		 * @param username
+		 * @param roomData
+		 * @return void
+		 */
+		void setCustomUserData(std::string username, std::string roomData);
+
+		/**
+		 * Updates the custom roomData associated with the given room on the server.
+		 * Result is provided in the onSetCustomRoomDataDone callback of the
+		 * RoomListener.
+		 *
+		 * @param roomid
+		 * @param roomData
+		 * @return void
+		 */
+		void setCustomRoomData(std::string roomid, std::string roomData);
+
+		/**
+		 * Retrieves room ids of all the live rooms on the server. Result is
+		 * provided in the onGetAllRoomsDone callback of the ZoneListener.
+		 *
+		 * @return void
+		 */
 		void getAllRooms();
+
+		/**
+		 * Retrieves usernames of all the users connected to the server. Result is
+		 * provided in the onGetOnlineUsers callback of the ZoneListener.
+		 *
+		 * return @void
+		 */
 		void getOnlineUsers();
-		void updateRoomProperties(std::string, std::map<std::string,std::string>,std::vector<std::string>);
+
+		/**
+		 * sends a update room properties request to the server to update the properties of the room
+		 * Result of the request is provided
+		 * in the onJoinRoomDone callback of the RoomListener.
+		 * @param roomId 
+		 * @param properties 
+		 * @param removeProperties 
+		 */
+		void updateRoomProperties(std::string roomId, std::map<std::string,std::string> properties,std::vector<std::string> removeProperties);
+
+		/**
+		 * sends a update room properties request to the server to update the properties of the room
+		 * Result of the request is provided
+		 * in the onJoinRoomDone callback of the RoomListener.
+		 *
+		 * @param roomId 
+		 * @param properties 
+		 * return @void
+		 */
 		void updateRoomProperties(std::string, std::map<std::string,std::string>);
-		void joinRoomWithNUser(int);
-		void joinRoomWithProperties(std::map<std::string,std::string>);
-		void getRoomWithNUser(int);
-		void getRoomWithProperties(std::map<std::string,std::string>);
+
+		/**Match making
+		 * sends a join room request to the server if user want to join a room with n user
+		 * Result of the request is provided
+		 * in the onJoinRoomDone callback of the RoomListener.
+		 *
+		 * @param userCount 
+		 * return @void
+		 */
+		void joinRoomWithNUser(int userCount);
+
+		/**Match making
+		 * sends a join room request to the server if user want to join a room with required properties
+		 * Result of the request is provided
+		 * in the onJoinRoomDone callback of the RoomListener.
+		 *
+		 * @param properties 
+		 * return @void
+		 */
+		void joinRoomWithProperties(std::map<std::string,std::string> properties);
+
+		/**
+		 * Retrieves information of the rooms that contain n user in it from the server. Result is
+		 * provided in the onGetLiveRoomInfo callback of the RoomListener.
+		 *
+		 * @param userCount
+		 * return @void
+		 */
+		void getRoomWithNUser(int userCount);
+
+		/**
+		 * Retrieves information of the room that contain specific 
+		 * properties from the server. Result is
+		 * provided in the onGetLiveRoomInfo callback of the RoomListener.
+		 *
+		 * @param properties
+		 * @return void
+		 */
+		void getRoomWithProperties(std::map<std::string,std::string> properties);
+
+		/**
+		 * Terminate the SDK and frees the all allocating memory
+		 *
+		 * @return void
+		 */
 		void terminate();
+
+		/**
+		 * Updates the Warp SDK. Should be called every once in a loop if SetPollingMode was set to true
+		 * By default SetPollingMode is set to true
+		 *
+		 * @return void
+		 */
 		void Update();
 
+		/**
+		 * Used Internally should not be used explicitly
+		 */
 		void sockonConnection(int);
+
+		/**
+		 * Used Internally should not be used explicitly
+		 */
 		void sockonMsg(char[], int len);
 	};
 }
