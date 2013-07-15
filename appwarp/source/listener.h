@@ -126,8 +126,16 @@ namespace AppWarp
 		 * @param revent
 		 * @param user
 		 * @param properties
+		 * @param lockProperties
 		 */
-		virtual void onUserChangeRoomProperty(AppWarp::room revent, std::string user,std::map<std::string, std::string> properties){}
+		virtual void onUserChangeRoomProperty(AppWarp::room revent, std::string user,std::map<std::string, std::string> properties, std::map<std::string, std::string> lockProperties){}
+
+		/**
+		 * Invoked when a joined user sends a private chat to user.
+		 * @param sender
+		 * @param chat
+		 */
+		virtual void onPrivateChatReceived(std::string sender, std::string chat);
 	};
 
 	class RoomRequestListener
@@ -174,6 +182,18 @@ namespace AppWarp
 		 * @param revent
 		 */
 		virtual void onUpdatePropertyDone(AppWarp::liveroom revent){}
+
+		/* 
+		 * Invoked in response to lock property to any room
+		 * @param result
+		 */
+		virtual void onLockPropertiesDone(int result){}
+
+		/* 
+		 * Invoked in response to unlock property to any room
+		 * @param result
+		 */
+		virtual void onUnlockPropertiesDone(int result){}
 	};
 
 	class ZoneRequestListener
@@ -230,6 +250,12 @@ namespace AppWarp
 		 * @param result
 		 */
 		virtual void onSendChatDone(int result){}
+
+		/**
+		 * Result of SendPrivateChat request. The result value maps to a WarpResponseResultCode
+		 * @param result
+		 */
+		virtual void onSendPrivateChatDone(int result){}
 	};
 
 	class UpdateRequestListener

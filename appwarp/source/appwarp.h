@@ -454,6 +454,61 @@ namespace AppWarp
 		void Update();
 
 		/**
+		 * sends a private message to user it it does not matter user is in which room.
+		 * Result of the request is provided in the onSendChatDone callback of the
+		 * ChatListener.
+		 *
+		 * @param to
+		 * @param message
+		 */
+		void sendPrivateChat(std::string to, std::string msg);
+
+		/**
+		 * Retrieves information of the room that contain user in given range it from the server. 
+		 * Result is provided in the onGetLiveRoomInfo callback of the RoomListener.
+		 * 
+		 * @param minUser, maxUser
+		 */
+		void getRoomsInRange(int min, int max);
+
+		/*
+		 * send a join room request to server with matchmaking parameters this method 
+		 * allow user to choose room with user to specified range and also a flag
+		 * which decide priority to room
+		 * Result of the request is provided in the onJoinRoomDone callback of the RoomListener.
+		 * 
+		 * @ params
+		 * minUser: number of minimum user in the room
+		 * maxUser: number if maximum user in the room
+		 * maxPreferred: define search priority
+		 */
+		void joinRoomInRange(int min, int max, bool maxPreferred);
+
+		/*
+		 * Lock the properties associated with the joined room on the server for requested user. 
+		 * Result is provided in the onLockPropertyDone callback of the registered 
+		 * RoomRequestListener objects. Lock properties will fail if any other user has lock on same
+		 * property, otherwise property will be added in lockTable with owner name. This request 
+		 * (if successful) will also result in an onUserChangeRoomProperty notification on the 
+		 * registered NotifyListener objects to be triggered for all subscribed users of the room.
+		 *
+		 * @param properties
+		 */
+		void lockRoomProperties(std::map<std::string,std::string> properties);
+
+		/*
+		 * Unlock the properties associated with the joined room on the server for requested user. 
+		 * Result is provided in the onUnlockPropertyDone callback of the registered 
+		 * RoomRequestListener objects. Unlock properties will fail if any other user has lock on 
+		 * same property, otherwise property will be removed from lock table. This request 
+		 * (if successful) will also result in an onUserChangeRoomProperty notification on the 
+		 * registered NotifyListener objects to be triggered for all subscribed users of the room.
+		 *
+		 * @param properties
+		 */
+		void unlockRoomProperties(std::vector<std::string> properties);
+
+		/**
 		 * Used Internally should not be used explicitly
 		 */
 		void sockonConnection(int);

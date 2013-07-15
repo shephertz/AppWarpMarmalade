@@ -91,7 +91,13 @@ namespace AppWarp
 			update_room_property = 25,
 			join_room_with_properties = 27,
 			get_room_with_n_user = 28,
-			get_room_with_properties = 29
+			get_room_with_properties = 29,
+
+			private_chat = 30,
+			lock_properties = 35,
+			unlock_properties = 36,
+			join_room_in_range = 37,
+			get_room_in_range = 38
 		};
 	}
 
@@ -121,7 +127,9 @@ namespace AppWarp
 			chat = 9,
 			update_peers = 10,
 			//MatchMaking
-			room_property_change = 11
+			room_property_change = 11,
+
+			private_chat = 12
 		};
 	}
 
