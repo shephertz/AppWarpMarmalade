@@ -135,7 +135,7 @@ namespace AppWarp
 		 * @param sender
 		 * @param chat
 		 */
-		virtual void onPrivateChatReceived(std::string sender, std::string chat);
+		virtual void onPrivateChatReceived(std::string sender, std::string chat){}
 	};
 
 	class RoomRequestListener
