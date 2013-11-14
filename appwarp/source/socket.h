@@ -12,6 +12,7 @@ namespace AppWarp
 		class Socket
 		{
 			s3eSocket *socket;
+			static bool m_connected;
 		public:
 			Socket();
 			~Socket();

@@ -17,7 +17,6 @@ by AppWarp Marmalade SDK and cloud.
 #include <map>
 #include <vector>
 
-#include "pthread.h"
 #include "IwHTTP.h"
 //#include "IwGx.h"
 
@@ -61,13 +60,10 @@ namespace AppWarp
 		void handleLobbyResponse(int,response *);
 		void handleRoomResponse(int, response *);
 		void handleZoneResponse(int, response *);
-		pthread_t thread;
 
 		std::string userName;
 		CIwHTTP *http;
 		static int32 GotHeaders(void *, void *);
-
-		bool threaded;
 
 		bool m_isConnected;
 	public:
@@ -95,17 +91,6 @@ namespace AppWarp
 		 * @return void
 		 */
 		static void initialize(std::string apikey, std::string secretekey);
-
-		/*
-		 * You can either run AppWarp in a separate thread or in main thread. If you want to 
-		 * run it in main thread then you have to Set Polling Mode to true. By default, this 
-		 * is set to true. If you are running AppWarp in main thread then, you have to call Update() 
-		 * function at-least once in your game loop.
-		 *
-		 * @param mode 
-		 * @return void
-		 */
-		void SetPollingMode(bool mode);
 
 		/**
 		 * Set your listener object on which callbacks will be invoked when a
