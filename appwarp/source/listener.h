@@ -1,9 +1,26 @@
-
-/**
- *
- * @author Suyash Mohan (suyash.mohan@shephertz.co.in)
+/*
+ Copyright (c) 2013 Shephertz Technologies Pvt. Ltd.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ The Software shall be used for Good, not Evil.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
  */
-
 #ifndef __APPWARP_LISTENER__
 #define __APPWARP_LISTENER__
 
@@ -14,258 +31,75 @@ namespace AppWarp
 	class ConnectionRequestListener
 	{
 	public:
-		/**
-		 * Invoked in response to a connect request.
-		 * @param result
-		 */
-		virtual void onConnectDone(int result) {};
-
-		/**
-		 * Invoked in response to a disconnect request.
-		 * @param result
-		 */
-		virtual void onDisConnectDone(int result) {};
+		virtual void onConnectDone(int) {};
+		virtual void onDisconnectDone(int) {};
 	};
 
 	class LobbyRequestListener
 	{
 	public:
-		/**
-		 * Invoked in response to a joinLobby request.
-		 * @param levent
-		 */
 		virtual void onJoinLobbyDone(AppWarp::lobby levent) {};
-
-		/**
-		 * Invoked in response to a leaveLobby request.
-		 * @param levent
-		 */
 		virtual void onLeaveLobbyDone(AppWarp::lobby levent) {};
-
-		/**
-		 * Invoked in response to a subscribeLobby request.
-		 * @param levent
-		 */
 		virtual void onSubscribeLobbyDone(AppWarp::lobby levent) {};
-
-		/**
-		 * Invoked in response to a UnSubscribeLobby request.
-		 * @param levent
-		 */
 		virtual void onUnsubscribeLobbyDone(AppWarp::lobby levent) {};
-
-		/**
-		 * Invoked in response to a getLiveLobbyInfo request.
-		 * @param levent
-		 */
 		virtual void onGetLiveLobbyInfoDone(AppWarp::livelobby levent) {};
 	};
 
 	class NotificationListener
 	{
 	public:
-		/**
-		 * Invoked when a room is created. Lobby subscribers will receive this.
-		 * @param revent
-		 */
-		virtual void onRoomCreated(AppWarp::room revent) {}
-
-		/**
-		 * Invoked when a room is deleted. Lobby subscribers will receive this.
-		 * @param revent
-		 */
-		virtual void onRoomDestroyed(AppWarp::room revent) {}
-
-		/**
-		 * Invoked when a user leaves a room. Lobby and the concerned room subscribers 
-		 * will receive this.
-		 * @param revent
-		 * @param user
-		 */
-		virtual void onUserLeftRoom(AppWarp::room revent, std::string user) {}
-
-		/**
-		 * Invoked when a user joins a room. Lobby and the concerned room subscribers 
-		 * will receive this.
-		 * @param revent
-		 * @param user
-		 */
-		virtual void onUserJoinedRoom(AppWarp::room revent, std::string user) {}
-
-		/**
-		 * Invoked when a user leaves a lobby. Lobby subscribers will receive this.
-		 * @param levent
-		 * @param user
-		 */
-		virtual void onUserLeftLobby(AppWarp::lobby levent, std::string user) {}
-
-		/**
-		 * Invoked when a user joins a lobby. Lobby subscribers will receive this.
-		 * @param levent
-		 * @param user
-		 */
-		virtual void onUserJoinedLobby(AppWarp::lobby levent, std::string user) {}
-
-		/**
-		 * Invoked when a joined user sends a chat. Rooms subscribers will receive this.
-		 * @param chatevent
-		 */
+		virtual void onRoomCreated(AppWarp::room rData) {}
+		virtual void onRoomDestroyed(AppWarp::room rData) {}
+		virtual void onUserLeftRoom(AppWarp::room rData, std::string user) {}
+		virtual void onUserJoinedRoom(AppWarp::room rData, std::string user) {}
+		virtual void onUserLeftLobby(AppWarp::lobby ldata, std::string user) {}
+		virtual void onUserJoinedLobby(AppWarp::lobby ldata, std::string user) {}
 		virtual void onChatReceived(AppWarp::chat chatevent) {}
-
-		/**
-		 * Invoked when a joined user sends a updatePeers request. Rooms subscribers 
-		 * will receive this.
-		 * @param update
-		 * @param len
-		 */
+        virtual void onPrivateChatReceived(std::string sender, std::string message) {}
 		virtual void onUpdatePeersReceived(AppWarp::byte update[], int len) {}
-
-		/**
-		 * Invoked when a user change room property. Lobby and the concerned room subscribers 
-		 * will receive this.
-		 * @param revent
-		 * @param user
-		 * @param properties
-		 * @param lockProperties
-		 */
-		virtual void onUserChangeRoomProperty(AppWarp::room revent, std::string user,std::map<std::string, std::string> properties, std::map<std::string, std::string> lockProperties){}
-
-		/**
-		 * Invoked when a joined user sends a private chat to user.
-		 * @param sender
-		 * @param chat
-		 */
-		virtual void onPrivateChatReceived(std::string sender, std::string chat){}
+		virtual void onUserChangeRoomProperty(AppWarp::room rData, std::string user,std::map<std::string, std::string> properties, std::map<std::string, std::string>lockTable){}
+        virtual void onUserPaused(std::string user,std::string locId,bool isLobby){}
+        virtual void onUserResumed(std::string user,std::string locId,bool isLobby){}
+        
 	};
 
 	class RoomRequestListener
 	{
 	public:
-		/**
-		 * Invoked in response to a subscribeRoom request.
-		 * @param revent
-		 */
 		virtual void onSubscribeRoomDone(AppWarp::room revent){}
-
-		/**
-		 * Invoked in response to a UnSubscribeRoom request.
-		 * @param revent
-		 */
 		virtual void onUnsubscribeRoomDone(AppWarp::room revent){}
-
-		/**
-		 * Invoked in response to a joinRoom request.
-		 * @param revent
-		 */
 		virtual void onJoinRoomDone(AppWarp::room revent){}
-
-		/**
-		 * Invoked in response to a leaveRoom request.
-		 * @param revent
-		 */
 		virtual void onLeaveRoomDone (AppWarp::room revent){}
-
-		/**
-		 * Invoked in response to a getLiveRoomInfo request.
-		 * @param revent
-		 */
 		virtual void onGetLiveRoomInfoDone(AppWarp::liveroom revent){}
-
-		/**
-		 * Invoked in response to a setCustomRoomData request.
-		 * @param revent
-		 */
 		virtual void onSetCustomRoomDataDone (AppWarp::liveroom revent){}
-
-		/* 
-		 * Invoked in response to add property to any room
-		 * @param revent
-		 */
 		virtual void onUpdatePropertyDone(AppWarp::liveroom revent){}
-
-		/* 
-		 * Invoked in response to lock property to any room
-		 * @param result
-		 */
-		virtual void onLockPropertiesDone(int result){}
-
-		/* 
-		 * Invoked in response to unlock property to any room
-		 * @param result
-		 */
-		virtual void onUnlockPropertiesDone(int result){}
+        virtual void onLockPropertiesDone(int result){}
+        virtual void onUnlockPropertiesDone(int result){}
 	};
 
 	class ZoneRequestListener
 	{
 	public:
-		/**
-		 * Invoked in response to a createRoom request.
-		 * @param revent
-		 */
 		virtual void onCreateRoomDone (AppWarp::room revent){}
-
-		/**
-		 * Invoked in response to a deleteRoom request.
-		 * @param revent
-		 */
 		virtual void onDeleteRoomDone (AppWarp::room revent){} 
-
-		/**
-		 * Invoked in response to a getAllRooms request.
-		 * @param revent
-		 */
-		virtual void onGetAllRoomsDone (AppWarp::liveresult revent){}
-
-		/**
-		 * Invoked in response to a getOnlineUsers request.
-		 * @param revent
-		 */
-		virtual void onGetOnlineUsersDone (AppWarp::liveresult revent){}
-
-		/**
-		 * Invoked in response to a getLiveUserInfo request.
-		 * @param uevent
-		 */
+		virtual void onGetAllRoomsDone (AppWarp::liveresult res){}
+		virtual void onGetOnlineUsersDone (AppWarp::liveresult res){}
 		virtual void onGetLiveUserInfoDone (AppWarp::liveuser uevent){}
-
-		/**
-		 * Invoked in response to a setCustomRoomData request.
-		 * @param uevent
-		 */
 		virtual void onSetCustomUserInfoDone (AppWarp::liveuser uevent){}
-
-		/**
-		 * Invoked in response to a getMatchMaking Rooms request.
-		 * @param mevent
-		 */
 		virtual void onGetMatchedRoomsDone(AppWarp::matchedroom mevent){}
 	};
 
 	class ChatRequestListener
 	{
 	public:
-		/**
-		 * Result of SendChat request. The result value maps to a WarpResponseResultCode
-		 * @param result
-		 */
-		virtual void onSendChatDone(int result){}
-
-		/**
-		 * Result of SendPrivateChat request. The result value maps to a WarpResponseResultCode
-		 * @param result
-		 */
-		virtual void onSendPrivateChatDone(int result){}
+		virtual void onSendChatDone(int res){}
+        virtual void onSendPrivateChatDone(int res){}
 	};
 
 	class UpdateRequestListener
 	{
 	public:
-		/**
-		 * Result of SendUpdatePeers request. The result value maps to a WarpResponseResultCode
-		 * @param result
-		 */
-		virtual void onSendUpdateDone(int result){}
+		virtual void onSendUpdateDone(int res){}
 	};
 }
 

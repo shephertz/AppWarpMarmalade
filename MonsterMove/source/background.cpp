@@ -30,7 +30,7 @@ void Background::Render()
 	{
 		for(float j=0; j<height+(-1*ey); j+=imgHeight)
 		{
-			Iw2DDrawImage(bg,CIwSVec2(i+ex,j+ey));
+			Iw2DDrawImage(bg,CIwFVec2(i+ex,j+ey));
 		}
 	}
 

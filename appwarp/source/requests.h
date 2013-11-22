@@ -21,43 +21,16 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-
-#ifndef __APPWARP_SOCKET__
-#define __APPWARP_SOCKET__
-#include <iostream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-
-
 namespace AppWarp
 {
-    class Client;
-	namespace Utility
-	{
-		class Socket
-		{
-			int sockd;
-            struct sockaddr_in serv_name;
-            Client* _callBack;
-            
-		public:
-			Socket(Client* owner);
-			~Socket();
-			int sockConnect(std::string, short );
-			int sockDisconnect();
-			int sockSend(char *,int);
-			void checkMessages();
-            
-		};
-
-	}
+		byte* buildWarpRequest(int, std::string, int &);
+		byte* buildWarpRequest(int , byte *, int , int &);
+		byte* buildAuthRequest(std::string, int &,std::string, std::string);
+		byte* buildLobbyRequest(int,int &);
+		byte *buildRoomRequest(int,std::string,int &);
+		byte *buildCreateRoomRequest(std::string,std::string,int,int &);
+		byte *buildCreateRoomRequest(std::string,std::string,int,std::string,int &);
+        byte *buildKeepAliveRequest(int requestType, int &len);
+		response *buildResponse(char *, int);
+		notify *buildNotify(char *, int);
 }
-
-#endif

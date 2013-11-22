@@ -1,26 +1,4 @@
-/*
- Copyright (c) 2013 Shephertz Technologies Pvt. Ltd.
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- The Software shall be used for Good, not Evil.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
- */
+
 namespace AppWarp
 {
 	typedef unsigned char byte;
@@ -65,9 +43,7 @@ namespace AppWarp
 			connection_error = 5,	
 			unknown_error = 6,
 			size_error = 7,
-			api_not_found = 8,
-            success_recovered = 9,
-            connection_error_recoverable = 10
+			api_not_found = 8
 		};
 	}
 
@@ -116,13 +92,12 @@ namespace AppWarp
 			join_room_with_properties = 27,
 			get_room_with_n_user = 28,
 			get_room_with_properties = 29,
-            private_chat = 30,
-            move = 31,
-            lock_properties = 35,
-            unlock_properties = 36,
-            join_room_range = 37,
-            get_room_range = 38,
-            keep_alive = 63
+
+			private_chat = 30,
+			lock_properties = 35,
+			unlock_properties = 36,
+			join_room_in_range = 37,
+			get_room_in_range = 38
 		};
 	}
 
@@ -153,37 +128,11 @@ namespace AppWarp
 			update_peers = 10,
 			//MatchMaking
 			room_property_change = 11,
-            private_chat = 12,
-            move_completed = 13,
-            user_paused = 14,
-            user_resumed = 15
+
+			private_chat = 12
 		};
 	}
 
-    namespace ConnectionState
-    {
-        enum
-        {
-            connected = 0,
-            connecting = 1,
-            
-            disconnected = 2,
-            disconnecting= 3,
-            
-            recovering = 4,
-        };
-    }
-    
-    namespace SocketStream
-    {
-        enum
-        {
-            stream_connecting = 1,
-            stream_connected = 2,
-            stream_failed = 3
-        };
-    }
-    
 	struct lobby_struct
 	{
 		std::string lobbyid;

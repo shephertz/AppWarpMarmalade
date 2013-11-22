@@ -39,7 +39,7 @@ void Player::Update()
 }
 void Player::Render()
 {
-	Iw2DDrawImage(spirit,CIwSVec2(Position.x,Position.y));
+	Iw2DDrawImage(spirit,CIwFVec2(Position.x,Position.y));
 }
 void Player::SetTarget(float x,float y)
 {
