@@ -122,7 +122,10 @@ namespace AppWarp
             unlock_properties = 36,
             join_room_range = 37,
             get_room_range = 38,
-            keep_alive = 63
+            keep_alive = 63,
+            start_game = 66,
+            stop_game = 67,
+            get_move_history = 68
 		};
 	}
 
@@ -156,7 +159,9 @@ namespace AppWarp
             private_chat = 12,
             move_completed = 13,
             user_paused = 14,
-            user_resumed = 15
+            user_resumed = 15,
+            game_started = 16,
+            game_stopped = 17
 		};
 	}
 
@@ -256,4 +261,12 @@ namespace AppWarp
 		int result;
 	};
 	typedef chat_struct chat;
+
+	typedef struct move_struct
+    {
+        std::string sender;
+        std::string moveData;
+        std::string nextTurn;
+        std::string roomId;
+    } move;
 }

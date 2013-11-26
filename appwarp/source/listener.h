@@ -60,7 +60,9 @@ namespace AppWarp
 		virtual void onUserChangeRoomProperty(AppWarp::room rData, std::string user,std::map<std::string, std::string> properties, std::map<std::string, std::string>lockTable){}
         virtual void onUserPaused(std::string user,std::string locId,bool isLobby){}
         virtual void onUserResumed(std::string user,std::string locId,bool isLobby){}
-        
+        virtual void onGameStarted(std::string sender, std::string id, std::string nextTurn){}
+        virtual void onGameStopped(std::string sender, std::string id){}
+        virtual void onMoveCompleted(move event){}
 	};
 
 	class RoomRequestListener
@@ -76,6 +78,15 @@ namespace AppWarp
         virtual void onLockPropertiesDone(int result){}
         virtual void onUnlockPropertiesDone(int result){}
 	};
+
+	class TurnBasedRoomRequestListener
+    {
+    public:
+        virtual void onStartGameDone(int res){}
+        virtual void onStopGameDone(int res){}
+        virtual void onSendMoveDone(int res){}
+        virtual void onGetMoveHistoryDone(int res, std::vector<move> history){}
+    };
 
 	class ZoneRequestListener
 	{
