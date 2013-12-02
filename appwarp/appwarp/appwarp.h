@@ -31,17 +31,10 @@
 #include <map>
 #include <vector>
 
-#include "socket.h"
 #include "IwHTTP.h"
 
-#include "HMAC_SHA1.h"
-#include "base64.h"
-#include "urlencode.h"
-#include "cJSON.h"
-
+#include "socket.h"
 #include "defines.h"
-#include "utilities.h"
-#include "requests.h"
 #include "listener.h"
 
 #define CLIENT_KEEP_ALIVE_TIME_INTERVAL 2  //In second

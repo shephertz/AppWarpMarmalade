@@ -8,7 +8,7 @@ library
 
 files
 {
-	(source)
+	(appwarp)
 	listener.h
 	appwarp.h
 }
