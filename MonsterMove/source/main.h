@@ -1,6 +1,6 @@
 
 
-#include "..\appwarp\appwarp.h"
+#include "appwarp.h"
 #include "game.h"
 #include "scene.h"
 #include "player.h"
