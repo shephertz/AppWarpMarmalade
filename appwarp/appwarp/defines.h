@@ -21,6 +21,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
+
+#ifndef __DEFINES_H__
+#define __DEFINES_H__
 namespace AppWarp
 {
 	typedef unsigned char byte;
@@ -123,6 +126,8 @@ namespace AppWarp
             join_room_range = 37,
             get_room_range = 38,
             keep_alive = 63,
+            assoc_port = 64,
+            ack_assoc_port = 65,
             start_game = 66,
             stop_game = 67,
             get_move_history = 68
@@ -270,3 +275,4 @@ namespace AppWarp
         std::string roomId;
     } move;
 }
+#endif

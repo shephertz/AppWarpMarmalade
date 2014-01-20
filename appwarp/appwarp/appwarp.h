@@ -34,6 +34,7 @@
 #include "IwHTTP.h"
 
 #include "socket.h"
+#include "udpsocket.h"
 #include "defines.h"
 #include "listener.h"
 
@@ -65,7 +66,13 @@ namespace AppWarp
 		 * @param secretekey
 		 * @return void
 		 */
-		static void initialize(std::string, std::string);
+		static void initialize(std::string, std::string, std::string = "");
+
+         /**
+          * Initiates the UDP handshake with the server. The result is provided in the
+          * onInitUDPDone callback of the connection request listener.
+         */
+        void initUDP();
         
         /**
 		 * Terminate the singleton instance and frees the allocated memory
@@ -348,6 +355,15 @@ namespace AppWarp
 		 * @param updateLen
 		 */
 		void sendUpdate(byte* update,int updateLen);
+
+        /**
+		 * sends a custom UDP update message to room in which the user is currently
+		 * joined. No acknowledgement is received for this request.
+		 *
+		 * @param update
+		 * @param updateLen
+    	 */
+		void sendUdpUpdate(byte*,int);
         
 		/**
 		 * Updates the custom roomData associated with the given user on the server.
@@ -502,7 +518,10 @@ namespace AppWarp
          * Not required to be called in Cocos2DX application code.
          */
 		void socketConnectionCallback(int);
-        void socketNewMsgCallback(unsigned char[], int len);        
+        void socketNewMsgCallback(unsigned char[], int len);  
+        void udpresponse(response* response);
+        void udpnotify(notify* notification);
+
         void update();
         
     private:
@@ -513,6 +532,7 @@ namespace AppWarp
 		
 		CIwHTTP *http;
         Utility::Socket* _socket;
+		Utility::UdpSocket* _udpsocket;
 		static Client* _instance;
 		Client();
 		ConnectionRequestListener * _connectionReqListener;

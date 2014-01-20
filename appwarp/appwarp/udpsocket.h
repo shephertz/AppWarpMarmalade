@@ -22,8 +22,9 @@
  SOFTWARE.
  */
 
-#ifndef __APPWARP_SOCKET__
-#define __APPWARP_SOCKET__
+#ifndef __APPWARP_UDPSOCKET__
+#define __APPWARP_UDPSOCKET__
+
 #include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -39,22 +40,21 @@ namespace AppWarp
     class Client;
 	namespace Utility
 	{
-		class Socket
+		class UdpSocket
 		{
 			int sockd;
             struct sockaddr_in serv_name;
             Client* _callBack;
             
 		public:
-			Socket(Client* owner);
-			~Socket();
-			int sockConnect(std::string, short );
-			int sockDisconnect();
+			UdpSocket(Client* owner);
+			~UdpSocket();
+            int connect(std::string host, short port);
+            void disconnect();
 			int sockSend(char *,int);
 			void checkMessages();
-            
 		};
-
+        
 	}
 }
 
