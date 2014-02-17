@@ -512,6 +512,10 @@ namespace AppWarp
          */
         void recoverConnection();
 
+		/*
+		 * Set's the geo location of server. 
+		 */
+		void setGeoLocation(std::string location);
 
         /**
          * Methods used for internal AppWarp socket callbacks.
@@ -528,6 +532,7 @@ namespace AppWarp
 		std::string APIKEY;
 		std::string SECRETKEY;
 		std::string APPWARPSERVERHOST;
+		std::string GEOLOCATION;
         bool isWaitingForData;
 		
 		CIwHTTP *http;
