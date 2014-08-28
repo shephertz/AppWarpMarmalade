@@ -144,6 +144,14 @@ namespace AppWarp
 		};
 	}
 
+	//Reason Code
+	namespace ReasonCode
+	{
+		enum{
+			waiting_for_paused_user = 21
+		};
+	}
+
 	//Update Type
 	namespace UpdateType
 	{

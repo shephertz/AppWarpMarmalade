@@ -517,6 +517,17 @@ namespace AppWarp
 		 */
 		void setGeoLocation(std::string location);
 
+		/*
+		 * Get the Session ID
+		 */
+		int getSessionID();
+
+		/*
+		 * Recover connection with SessionID and Username. This is helpful when app recovers
+		 * from crash
+		 */
+		void recoverConnectionWithSessionID(int sessio_id, std::string user_name);
+
         /**
          * Methods used for internal AppWarp socket callbacks.
          * Not required to be called in Cocos2DX application code.

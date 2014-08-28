@@ -31,7 +31,7 @@ namespace AppWarp
 	class ConnectionRequestListener
 	{
 	public:
-		virtual void onConnectDone(int) {};
+		virtual void onConnectDone(int, int) {};
 		virtual void onDisconnectDone(int) {};
 		virtual void onInitUDPDone(int) {};
 	};
