@@ -364,6 +364,20 @@ namespace AppWarp
 		 * @param updateLen
     	 */
 		void sendUdpUpdate(byte*,int);
+
+		/**
+		* sends a private binary message to a user through TCP protocol. The message
+		* is delivered only to the specified user. Result of the request is provided in the
+		* onSendPrivateUpdateDone callback of the UpdateRequestListener.
+		*/
+		void sendPrivateUpdate(std::string toUser, byte* update, int updateLen);
+		
+		/**
+		* sends a private binary message to a user through UDP protocol. The message
+		* is delivered only to the specified user. Result of the request is provided in the
+		* onSendPrivateUpdateDone callback of the UpdateRequestListener.
+		*/
+		void sendPrivateUdpUpdate(std::string toUser, byte* update, int updateLen);
         
 		/**
 		 * Updates the custom roomData associated with the given user on the server.
@@ -477,7 +491,7 @@ namespace AppWarp
          * provided in the onGameStarted callback of the TurnBasedRoomListener.
          *
          */
-        void startGame();
+		void startGame(bool isDefaultLogic = true, std::string firstTurn = "");
         
         /**
          * sends a stop game request to the server. Result of the request is
@@ -491,7 +505,12 @@ namespace AppWarp
          * turn.
          *
          */
-        void sendMove(std::string movedata);     
+		void sendMove(std::string movedata, std::string nextTurn = "");
+
+		/*
+		 * Set the Next Turn if onNextTurnRequest callback has been received
+		 */
+		void setNextTurn(std::string nextTurn);
         
         /**
          * sends a get move history request to the server. Result of the request is

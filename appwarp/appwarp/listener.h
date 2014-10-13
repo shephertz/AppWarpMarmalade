@@ -58,12 +58,14 @@ namespace AppWarp
 		virtual void onChatReceived(AppWarp::chat chatevent) {}
         virtual void onPrivateChatReceived(std::string sender, std::string message) {}
 		virtual void onUpdatePeersReceived(AppWarp::byte update[], int len, bool isUDP) {}
+		virtual void onPrivateUpdateReceived(std::string sender, AppWarp::byte update[], int len, bool isUDP) {}
 		virtual void onUserChangeRoomProperty(AppWarp::room rData, std::string user,std::map<std::string, std::string> properties, std::map<std::string, std::string>lockTable){}
         virtual void onUserPaused(std::string user,std::string locId,bool isLobby){}
         virtual void onUserResumed(std::string user,std::string locId,bool isLobby){}
         virtual void onGameStarted(std::string sender, std::string id, std::string nextTurn){}
         virtual void onGameStopped(std::string sender, std::string id){}
         virtual void onMoveCompleted(move event){}
+		virtual void onNextTurnRequest(std::string lastTurn){}
 	};
 
 	class RoomRequestListener
@@ -87,6 +89,7 @@ namespace AppWarp
         virtual void onStopGameDone(int res){}
         virtual void onSendMoveDone(int res){}
         virtual void onGetMoveHistoryDone(int res, std::vector<move> history){}
+		virtual void onSetNextTurnDone(int res){}
     };
 
 	class ZoneRequestListener
@@ -112,6 +115,7 @@ namespace AppWarp
 	{
 	public:
 		virtual void onSendUpdateDone(int res){}
+		virtual void onSendPrivateUpdateDone(int res){}
 	};
 }
 
